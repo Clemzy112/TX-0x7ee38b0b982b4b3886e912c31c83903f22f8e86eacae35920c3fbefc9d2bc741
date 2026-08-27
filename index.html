@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Withdrawal Details</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            width: 100%;
+            height: 100%;
+            background: #fff;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+        }
+
+        .phone-frame {
+            width: 100%;
+            max-width: 430px;
+            height: 100vh;
+            margin: 0 auto;
+            background: #fff;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+
+        /* STATUS BAR */
+        .status-bar {
+            background: #fff;
+            padding: 12px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 14px;
+            font-weight: 600;
+            border-bottom: 1px solid #f0f0f0;
+            padding-top: 16px;
+        }
+
+        .status-left {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .moon-icon {
+            font-size: 16px;
+        }
+
+        .status-right {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 12px;
+        }
+
+        .signal-icon, .wifi-icon, .battery-icon {
+            display: flex;
+            align-items: center;
+        }
+
+        /* HEADER */
+        .header {
+            padding: 16px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #fff;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .back-arrow {
+            font-size: 24px;
+            cursor: pointer;
+            color: #000;
+            font-weight: 300;
+            transition: opacity 0.2s;
+        }
+
+        .back-arrow:hover {
+            opacity: 0.6;
+        }
+
+        .header-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #000;
+            letter-spacing: -0.3px;
+        }
+
+        .headphones-icon {
+            font-size: 20px;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .headphones-icon:hover {
+            transform: scale(1.1);
+        }
+
+        /* CONTENT */
+        .content {
+            flex: 1;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* AMOUNT SECTION */
+        .amount-section {
+            padding: 40px 20px 30px;
+            text-align: center;
+            background: #fff;
+        }
+
+        .amount-display {
+            font-size: 48px;
+            font-weight: 600;
+            color: #000;
+            margin-bottom: 20px;
+            font-variant-numeric: tabular-nums;
+            letter-spacing: -1px;
+        }
+
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: #f0f9f7;
+            color: #1ec989;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 500;
+            margin-bottom: 20px;
+        }
+
+        .checkmark {
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .description-text {
+            font-size: 14px;
+            color: #666;
+            line-height: 1.5;
+            margin-bottom: 12px;
+        }
+
+        .info-link {
+            font-size: 13px;
+            color: #f0ad4e;
+            text-decoration: underline;
+            cursor: pointer;
+            font-weight: 500;
+            transition: opacity 0.2s;
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        .info-link:hover {
+            opacity: 0.8;
+        }
+
+        .dashboard-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 13px;
+            color: #fff;
+            background: #f0ad4e;
+            text-decoration: none;
+            font-weight: 600;
+            padding: 8px 20px;
+            border-radius: 20px;
+            transition: opacity 0.2s, transform 0.15s;
+            margin-top: 2px;
+        }
+
+        .dashboard-link:hover {
+            opacity: 0.88;
+            transform: translateY(-1px);
+        }
+
+        .dashboard-link:active {
+            transform: scale(0.97);
+        }
+
+        .dashboard-link svg {
+            width: 13px;
+            height: 13px;
+            flex-shrink: 0;
+        }
+
+        /* DETAILS SECTION */
+        .details-section {
+            padding: 0 20px 30px;
+            background: #fff;
+        }
+
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            padding: 18px 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .detail-row:last-child {
+            border-bottom: none;
+        }
+
+        .detail-label {
+            font-size: 14px;
+            color: #999;
+            font-weight: 400;
+        }
+
+        .detail-value {
+            font-size: 14px;
+            color: #000;
+            font-weight: 500;
+            text-align: right;
+            max-width: 250px;
+            word-break: break-all;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 6px;
+        }
+
+        .copy-container {
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+        }
+
+        .address-text {
+            text-align: right;
+            text-decoration: underline;
+            color: #000;
+            font-weight: 500;
+            line-height: 1.4;
+        }
+
+        .copy-btn-svg {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+            flex-shrink: 0;
+            transition: all 0.2s;
+            padding: 4px;
+            border-radius: 4px;
+        }
+
+        .copy-btn-svg:hover {
+            background: #f0f0f0;
+        }
+
+        .copy-btn-svg:active {
+            transform: scale(0.9);
+        }
+
+        .save-link {
+            font-size: 12px;
+            color: #f0ad4e;
+            text-decoration: underline;
+            cursor: pointer;
+            margin-top: 6px;
+            transition: opacity 0.2s;
+        }
+
+        .save-link:hover {
+            opacity: 0.8;
+        }
+
+        .txid-text {
+            text-align: right;
+            text-decoration: underline;
+            color: #000;
+            font-weight: 500;
+            line-height: 1.4;
+            font-size: 13px;
+        }
+
+        /* BOTTOM BUTTON */
+        .footer {
+            padding: 20px;
+            background: #fff;
+            border-top: 1px solid #f0f0f0;
+            display: flex;
+            justify-content: center;
+        }
+
+        .scam-report-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: #fff;
+            border: 1px solid #ddd;
+            color: #999;
+            padding: 10px 20px;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .scam-report-btn:hover {
+            background: #f9f9f9;
+            border-color: #ccc;
+            color: #666;
+        }
+
+        .scam-report-btn:active {
+            transform: scale(0.98);
+        }
+
+        .scam-report-btn svg {
+            width: 16px;
+            height: 16px;
+        }
+
+        /* TOAST NOTIFICATION */
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #333;
+            color: #fff;
+            padding: 12px 20px;
+            border-radius: 6px;
+            font-size: 13px;
+            opacity: 0;
+            transition: opacity 0.3s;
+            z-index: 1000;
+            pointer-events: none;
+        }
+
+        .toast.show {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        /* SCROLLBAR */
+        .content::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        .content::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .content::-webkit-scrollbar-thumb {
+            background: #ddd;
+            border-radius: 2px;
+        }
+
+        .content::-webkit-scrollbar-thumb:hover {
+            background: #ccc;
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 480px) {
+            .phone-frame {
+                box-shadow: none;
+                max-width: 100%;
+            }
+
+            .amount-display {
+                font-size: 40px;
+            }
+
+            .detail-value {
+                max-width: 180px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="phone-frame">
+
+    <!-- STATUS BAR -->
+    <div class="status-bar">
+        <div class="status-left">
+            <span></span>
+            <span class="moon-icon"></span>
+        </div>
+        <div class="status-right">
+            <span class="signal-icon"></span>
+            <span class="wifi-icon"></span>
+            <span class="battery-icon"></span>
+        </div>
+    </div>
+
+    <!-- HEADER -->
+    <div class="header">
+        <div class="header-left">
+            <span class="back-arrow" onclick="goBack()">←</span>
+            <span class="header-title"></span>
+        </div>
+        <span class="headphones-icon"></span>
+    </div>
+
+    <!-- CONTENT -->
+    <div class="content">
+
+        <!-- AMOUNT SECTION -->
+        <div class="amount-section">
+            <div class="amount-display">250,000.00 USDT</div>
+            <div class="status-badge">
+                <span class="checkmark">
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="8" cy="8" r="7" stroke="#1ec989" stroke-width="1.5"/>
+                        <path d="M4 8L7 11L12 5" stroke="#1ec989" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </span>
+                <span>Completed</span>
+            </div>
+            <p class="description-text">Crypto deposited into Binance. Please contact the recipient platform for your transaction receipt.</p>
+            <a
+                class="info-link"
+                href="https://asset-management-theta-six.vercel.app"
+                target="_blank"
+                rel="noopener noreferrer"
+            >Why hasn't my deposit reach yet?</a>
+            <a class="dashboard-link" href="https://app-binance-chi.vercel.app" target="_blank" rel="noopener noreferrer">
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M3 12L12 3L21 12V20C21 20.5523 20.5523 21 20 21H15V16H9V21H4C3.44772 21 3 20.5523 3 20V12Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+                </svg>
+                Open Dashboard
+            </a>
+        </div>
+
+        <!-- DETAILS SECTION -->
+        <div class="details-section">
+
+            <!-- Network -->
+            <div class="detail-row">
+                <span class="detail-label">Network</span>
+                <span class="detail-value">ETH</span>
+            </div>
+
+            <!-- Address -->
+            <div class="detail-row">
+                <span class="detail-label">Address</span>
+                <div style="display: flex; flex-direction: column; align-items: flex-end; gap: 4px;">
+                    <div class="copy-container">
+                        <span class="address-text">0x7a69f3Bb74AC0AB1816Bc03458A47c8E93c62D25</span>
+                        <svg class="copy-btn-svg" onclick="copyText('0xeb611cd61ea3160d2cbf4dfd38bbcc15a86d4cad', this)" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M9 3H7C5.89543 3 5 3.89543 5 5V19C5 20.1046 5.89543 21 7 21H17C18.1046 21 19 20.1046 19 19V17M9 3C9 1.89543 9.89543 1 11 1H19C20.1046 1 21 1.89543 21 3V13C21 14.1046 20.1046 15 19 15H11C9.89543 15 9 14.1046 9 13V3Z" stroke="#999" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </div>
+                    <span class="save-link" onclick="saveAddress()">Save Address</span>
+                </div>
+            </div>
+
+            <!-- Txid -->
+            <div class="detail-row">
+                <span class="detail-label">Txid</span>
+                <div style="display: flex; flex-direction: column; align-items: flex-end; gap: 4px;">
+                    <div class="copy-container">
+                        <span class="txid-text">0x7ee38b0b982b4b3886e912c3<br>1c83903f22f8e86eacae35920c<br>3fbefc9d2bc741</span>
+                        <svg class="copy-btn-svg" onclick="copyText('0x9c21c9216ab759bf4267837d9fa4f63bdb2f0b99c684f3b0e861f002d735ce52', this)" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M9 3H7C5.89543 3 5 3.89543 5 5V19C5 20.1046 5.89543 21 7 21H17C18.1046 21 19 20.1046 19 19V17M9 3C9 1.89543 9.89543 1 11 1H19C20.1046 1 21 1.89543 21 3V13C21 14.1046 20.1046 15 19 15H11C9.89543 15 9 14.1046 9 13V3Z" stroke="#999" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Amount -->
+            <div class="detail-row">
+                <span class="detail-label">Amount</span>
+                <span class="detail-value">250,000.00 USDT</span>
+            </div>
+
+            <!-- Network Fee -->
+            <div class="detail-row">
+                <span class="detail-label">Network fee</span>
+                <span class="detail-value">0.0027 ETH</span>
+            </div>
+
+            <!-- Withdrawal Wallet -->
+            <div class="detail-row">
+                <span class="detail-label">Withdrawal Wallet</span>
+                <span class="detail-value">Spot Account</span>
+            </div>
+
+            <!-- Date -->
+            <div class="detail-row">
+                <span class="detail-label">Date</span>
+                <span class="detail-value">2026-08-22 10:13:40</span>
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- FOOTER -->
+    <div class="footer">
+        <button class="scam-report-btn" onclick="reportScam()">
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 2L15.09 8.26H22L16.95 12.51L19.09 18.76L12 14.51L4.91 18.76L7.05 12.51L2 8.26H8.91L12 2Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+            </svg>
+            <span>Scam Report</span>
+        </button>
+    </div>
+
+</div>
+
+<!-- TOAST NOTIFICATION -->
+<div class="toast" id="toast"></div>
+
+<script>
+
+function copyText(text, icon) {
+    navigator.clipboard.writeText(text).then(() => {
+        showToast('Copied to clipboard');
+
+        const originalSvg = icon.innerHTML;
+        icon.innerHTML = `<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M20 6L9 17L4 12" stroke="#1ec989" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>`;
+
+        setTimeout(() => {
+            icon.innerHTML = originalSvg;
+        }, 1500);
+    }).catch(() => {
+        showToast('Failed to copy');
+    });
+}
+
+function saveAddress() {
+    showToast('Address saved to contacts');
+}
+
+function reportScam() {
+    alert('Scam Report\n\nThis feature allows you to report suspicious transactions.\n\nPlease provide:\n• Description of the issue\n• Screenshots (if applicable)\n• Transaction details\n\nOur team will review and take appropriate action.');
+}
+
+function goBack() {
+    alert('Going back to previous screen...');
+}
+
+function showToast(message) {
+    const toast = document.getElementById('toast');
+    toast.textContent = message;
+    toast.classList.add('show');
+
+    setTimeout(() => {
+        toast.classList.remove('show');
+    }, 2000);
+}
+
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+        goBack();
+    }
+});
+
+</script>
+
+</body>
+</html>
